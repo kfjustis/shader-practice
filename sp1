@@ -1,0 +1,63 @@
+// Code snippets from https://gamedevelopment.tutsplus.com/tutorials/
+// a-beginners-guide-to-coding-graphics-shaders--cms-23313
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+	//vec2 uv = fragCoord.xy / iResolution.xy;
+	//fragColor = vec4(uv,0.1+0.1*sin(iTime),1.0);
+
+    vec4 solidRed = vec4(1.0,0.0,0.0,1.0);
+    vec4 solidBlue = vec4(0.0, 0.0, 1.0, 1.0);
+
+    fragColor = solidBlue;
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+	vec2 xy = fragCoord.xy; // coords for current pixel
+
+    vec4 solidRed = vec4(0.0,0.0,0.0,1.0); // start as black
+
+	// x coord just randomly picked
+	if (xy.x > 250.0) {
+		solidRed.r = 1.0;
+	}
+    fragColor = solidRed;
+}
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+	vec2 xy = fragCoord.xy; // coords for current pixel
+
+    vec4 solidRed = vec4(0.0,0.0,0.0,1.0); // start as black
+
+	// x coord just randomly picked
+	if (xy.x > (iResolution.x/2.0)) {
+		solidRed.r = 1.0;
+	}
+    fragColor = solidRed;
+}
+
+// Shadertoys gives you access to extra inputs (uniforms) that we can use.
+
+// grayscale (kind of) with texture
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec2 xy = fragCoord.xy / iResolution.xy;//Condensing this into one line
+    vec4 texColor = texture(iChannel0,xy);//Get the pixel at xy from iChannel0
+   	texColor.r = (texColor.r + texColor.g + texColor.b)/3.0;
+    texColor.g = (texColor.r + texColor.g + texColor.b)/3.0;
+    texColor.b = (texColor.r + texColor.g + texColor.b)/3.0;
+    fragColor = texColor;//Set the screen pixel to that color
+}
+
+// moving with global time variable and texture
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    vec2 xy = fragCoord.xy / iResolution.xy; // Condensing this into one line
+    vec4 texColor = texture(iChannel0,xy); // Get the pixel at xy from iChannel0
+    texColor.r *= abs(sin(iTime));
+    texColor.g *= abs(cos(iTime));
+    //texColor.b *= abs(sin(iTime) * cos(iTime));
+    fragColor = texColor; // Set the screen pixel to that color
+}
